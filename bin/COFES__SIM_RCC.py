@@ -28,6 +28,14 @@ def siguiente_recibo(fecha):
         return dt.date(fecha.year + 1, 1, 2)
     return dt.date(fecha.year, fecha.month + 1, 2)
 
+FECHAS_BLOQUEO = pd.read_csv('./data/COFES_01_Date_Blocage.csv', sep=';', parse_dates=['Fecha_BLOQUEO'], dayfirst=True).sort_values(by='Fecha_BLOQUEO')
+
+    
+''Calcular la fecha del primer vencimiento en base a la fecha de bloqueo posterior a la fecha de financiación'''
+    proximas_db = FECHAS_BLOQUEO[FECHAS_BLOQUEO['Fecha_BLOQUEO'] >= fecha_financiacion]
+    fecha_primer_vencimiento = proximas_db['Fecha_BLOQUEO'].iloc[0].replace(day=dia_pago) + pd.DateOffset(months=1)
+
+
 # ---------------------------------------------------------
 # CALCULO INTERESES
 # ---------------------------------------------------------
